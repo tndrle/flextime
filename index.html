@@ -51,6 +51,8 @@
           els.max.innerText = shifted(time, 10 + 0.75);
           els.regular.innerText = shifted(time, 7.2 + 0.5);
           els.regular1h.innerText = shifted(time, 7.2 + 1);
+
+          els.date.innerText = date;
         }
 
         els.time.addEventListener("change", (event) => setTimes());
@@ -61,7 +63,6 @@
           els.date.innerText = "Uhrzeit wählen";
           els.time.value = "08:00";
         } else {
-          els.date.innerText = date;
           els.time.value = start;
           setTimes();
         }
