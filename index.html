@@ -34,17 +34,10 @@
           els[id] = document.getElementById(id);
         }
 
-        const today = new Date().toLocaleDateString("de-DE", {
-          weekday: "long",
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        });
-
         function setTimes() {
           const time = els.time.value;
           localStorage.setItem("start", time);
-          localStorage.setItem("date", today);
+          localStorage.setItem("date", date);
 
           els.breakNo.innerText = shifted(time, 6);
           els.break30.innerText = shifted(time, 9 + 0.5);
@@ -55,13 +48,20 @@
           els.date.innerText = date;
         }
 
-        els.time.addEventListener("change", (event) => setTimes());
+        els.time.addEventListener("change", () => setTimes());
 
-        const date = localStorage.getItem("date");
+        const today = new Date().toLocaleDateString("de-DE", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
         const start = localStorage.getItem("start");
-        if (date != today || start == null) {
+        let date = localStorage.getItem("date");
+        if (date == null || start == null || date != today) {
           els.date.innerText = "Uhrzeit wählen";
           els.time.value = "08:00";
+          date = today;
         } else {
           els.time.value = start;
           setTimes();
