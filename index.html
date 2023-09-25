@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Flextime</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+
+    <script>
+      "use strict";
+
+      function shifted(time, hours) {
+        const date = Date.parse("0000-01-01 " + time) + hours * 60 * 60 * 1000;
+        return new Date(date).toLocaleTimeString("de-DE", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+      }
+
+      window.addEventListener("DOMContentLoaded", () => {
+        const els = {};
+        for (const id of [
+          "date",
+          "time",
+          "break30",
+          "max",
+          "breakNo",
+          "regular",
+          "regular1h",
+        ]) {
+          els[id] = document.getElementById(id);
+        }
+
+        const today = new Date().toLocaleDateString("de-DE", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+
+        function setTimes() {
+          const time = els.time.value;
+          localStorage.setItem("start", time);
+          localStorage.setItem("date", today);
+
+          els.breakNo.innerText = shifted(time, 6);
+          els.break30.innerText = shifted(time, 9 + 0.5);
+          els.max.innerText = shifted(time, 10 + 0.75);
+          els.regular.innerText = shifted(time, 7.2 + 0.5);
+          els.regular1h.innerText = shifted(time, 7.2 + 1);
+        }
+
+        els.time.addEventListener("change", (event) => setTimes());
+
+        const date = localStorage.getItem("date");
+        const start = localStorage.getItem("start");
+        if (date != today || start == null) {
+          els.date.innerText = "Uhrzeit wählen";
+          els.time.value = "08:00";
+        } else {
+          els.date.innerText = date;
+          els.time.value = start;
+          setTimes();
+        }
+      });
+    </script>
+  </head>
+
+  <body>
+    <div
+      class="content"
+      style="margin: 0 auto; width: 18rem; padding-top: 3rem"
+    >
+      <h5 id="date"></h5>
+      <input id="time" class="input" type="time" autofocus />
+      <table class="table is-striped mt-4">
+        <tr>
+          <td>keine Pause</td>
+          <td id="breakNo"></td>
+        </tr>
+        <tr>
+          <td>30 min Pause</td>
+          <td id="break30"></td>
+        </tr>
+        <tr>
+          <td>10 Stunden (45 min)</td>
+          <td id="max"></td>
+        </tr>
+        <tr>
+          <td>7,2 Stunden (30 min)</td>
+          <td id="regular"></td>
+        </tr>
+        <tr>
+          <td>7,2 Stunden (1 h)</td>
+          <td id="regular1h"></td>
+        </tr>
+      </table>
+    </div>
+  </body>
+</html>
