@@ -13,7 +13,7 @@
       "use strict";
 
       function shifted(time, hours) {
-        const date = Date.parse("0000-01-01 " + time) + hours * 60 * 60 * 1000;
+        const date = Date.parse("2020-01-01T" + time) + hours * 60 * 60 * 1000;
         return new Date(date).toLocaleTimeString("de-DE", {
           hour: "2-digit",
           minute: "2-digit",
